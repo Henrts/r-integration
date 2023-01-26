@@ -1,5 +1,6 @@
 const fs = require("fs");
 const pt = require("path");
+const events = require('events');
 var child_process = require("child_process");
 
 
@@ -56,7 +57,8 @@ getCurrentOs = () => {
  * @param {String[]} args an array of parameters to be passed to the command
  * @returns {Promise<string>} the command execution result
  */
- executeShellCommandAsync = (command, args) => {
+ executeShellCommandAsync = (command, args, emitter) => {
+
 	return new Promise((resolve, reject) => {
 		var stdout = "";
 		var stderr = "";
@@ -65,11 +67,18 @@ getCurrentOs = () => {
 
 		process.stdout.on('data', (data) => {		
 			data=data.toString();
+			if(data.indexOf("progress-") !== -1 && emitter) {
+				const [_, progress] = data.replaceAll('"', '').trim().split("-")
+				emitter.emit("progress", progress)
+			}
 			stdout+=data;
 		});
 		
 		process.stderr.on('data', (data) => {		
 			data=data.toString();
+			if(data.indexOf("progress-") !== -1) {
+				console.log(data)
+			}
 			stderr+=data;
 		});
 		
@@ -153,7 +162,7 @@ executeRCommand = (command, RBinariesLocation) => {
 	if (RscriptBinaryPath) {
 		var args = ["-e", command];
 		var commandResult = executeShellCommand(RscriptBinaryPath, args);
-
+		console.log("Command Result", commandResult.stdout)
 		if (commandResult.stdout) {
 			output = commandResult.stdout;
 			output = filterMultiline(output);
@@ -177,14 +186,14 @@ executeRCommand = (command, RBinariesLocation) => {
  * @returns {Promise<string>} an array containing all the results from the command
  * execution output, null if there was an error
  */
-executeRCommandAsync = (command, RBinariesLocation) => {
+executeRCommandAsync = (command, RBinariesLocation, emitter) => {
 	return new Promise(function(resolve, reject) {
 
 		let RscriptBinaryPath = isRscriptInstallaed(RBinariesLocation);
 
 		if (RscriptBinaryPath) {
 			var args = ["-e", command];
-			executeShellCommandAsync(RscriptBinaryPath, args).then((output) => {
+			executeShellCommandAsync(RscriptBinaryPath, args, emitter).then((output) => {
 				output = filterMultiline(output);
 				resolve(output);
 			}).catch((stderr) => {
@@ -324,11 +333,12 @@ callMethod = (fileLocation, methodName, params, RBinariesLocation) => {
  * @param {string} fileLocation where the file containing the function is stored
  * @param {string} methodName the name of the method to execute
  * @param {String []} params a list of parameters to pass to the function
+ * @param {EventEmitter} emitter an event emitter to track function progress
  * @param {string} RBinariesLocation optional parameter to specify an
  * alternative location for the Rscript binary
  * @returns {Promise<string>} the execution output of the function
  */
-callMethodAsync = (fileLocation, methodName, params, RBinariesLocation) => {
+callMethodAsync = (fileLocation, methodName, params, emitter, RBinariesLocation) => {
 	return new Promise(function(resolve, reject) {
 
 		if (!methodName || !fileLocation || !params) {
@@ -357,7 +367,7 @@ callMethodAsync = (fileLocation, methodName, params, RBinariesLocation) => {
 		var methodSyntax = methodSyntax.slice(0, -1);
 		methodSyntax += ")";
 
-		executeRCommandAsync(`source('${fileLocation}') ; print(${methodSyntax})`, RBinariesLocation).then((res) => {
+		executeRCommandAsync(`source('${fileLocation}') ; print(${methodSyntax})`, RBinariesLocation, emitter).then((res) => {
 			resolve(res);
 		}).catch((error) => {
 			reject(`${error}`);

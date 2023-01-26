@@ -1,3 +1,9 @@
+# Changes from original repo
+
+This fork adds support for progress reporting from the R function enviroment. 
+
+Format is: "progress-[optional-message]
+
 # R-integration - Node JS  API
 
 [![Node JS CI](https://github.com/FabrizioSandri/r-integration/actions/workflows/node.js.yml/badge.svg)](https://github.com/FabrizioSandri/r-integration/actions)

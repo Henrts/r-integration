@@ -1,5 +1,5 @@
 {
-    "name": "r-integration",
+    "name": "henrts-r-integration",
     "version": "2.5.0",
     "description": "Simple portable library used to interact with pre-installed R compiler by running commands or scripts(files)",
     "main": "src/R.js",
@@ -8,24 +8,21 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/FabrizioSandri/r-integration.git"
+        "url": "git+https://github.com/Henrts/r-integration.git"
     },
     "keywords": [
         "r",
         "r-integration",
         "r-command"
     ],
-    "author": "Sandri Fabrizio",
+    "author": "Henrique Sousa",
     "license": "GPL-3.0-or-later",
-    "bugs": {
-        "url": "https://github.com/FabrizioSandri/r-integration/issues"
-    },
-    "homepage": "https://github.com/FabrizioSandri/r-integration#readme",
+    "homepage": "https://github.com/Henrts/r-integration.git#readme",
     "devDependencies": {
         "chai": "^4.3.4",
         "mocha": "^9.1.3"
     },
-    "optionalDependencies": { 
-        "fsevents": "2.1.2" 
+    "optionalDependencies": {
+        "fsevents": "2.1.2"
     }
 }
