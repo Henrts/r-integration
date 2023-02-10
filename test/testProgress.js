@@ -8,6 +8,5 @@ eventEmitter.on("progress", d => {
 
 const test = async () => {
     const r = await validator.callMethodAsync("./RScripts/test_progress.R", "slow_sum", [10], eventEmitter)
-    console.log(r);
 }
 test();

@@ -4,13 +4,13 @@ slow_sum <- function(x) {
   sum <- 0
   Sys.sleep(1)
   sum + 10
-  print("progress-Reading Files")
+  print("progress-Reading Files-0")
   Sys.sleep(1)
   sum + 10
-  print("progress-Now processing rest of files")
+  print("progress-Now processing rest of files-50")
   Sys.sleep(1)
   sum + 10
-  print("progress-Almost done...")
+  print("progress-Almost done...-100")
   Sys.sleep(1)
   sum + 10
   sum

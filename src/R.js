@@ -68,8 +68,8 @@ getCurrentOs = () => {
 		process.stdout.on('data', (data) => {		
 			data=data.toString();
 			if(data.indexOf("progress-") !== -1 && emitter) {
-				const [_, progress] = data.replaceAll('"', '').trim().split("-")
-				emitter.emit("progress", progress)
+				const [_, progress, pct] = data.replaceAll('"', '').trim().split("-")
+				emitter.emit("progress", progress + (pct ? '-' + pct : ''))
 			}
 			stdout+=data;
 		});

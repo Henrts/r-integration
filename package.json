@@ -1,6 +1,6 @@
 {
     "name": "henrts-r-integration",
-    "version": "2.5.0",
+    "version": "2.5.1",
     "description": "Simple portable library used to interact with pre-installed R compiler by running commands or scripts(files)",
     "main": "src/R.js",
     "scripts": {
